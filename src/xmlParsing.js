@@ -44,19 +44,7 @@ function validator(xpath, currentValue, newValue) {
     const child = item.slice(0, item.length - 1);
 
     // Make sure the child is an array using the concat function
-    const arrayChild = [].concat(newValue[child]);
-
-    // If it's not the root array, return an array version directly
-    if (!xpath.startsWith(`/${item}`)) {
-        return arrayChild;
-    }
-
-    /* eslint-disable no-param-reassign */
-    newValue[item] = arrayChild;
-    delete newValue[child];
-    /* eslint-enable no-param-reassign */
-
-    return newValue;
+    return [].concat(newValue[child]);
 }
 
 const xmlParseOptions = {
@@ -82,15 +70,15 @@ function parseResult(data) {
                 return;
             }
 
-            const type = Object.keys(xml)[0];
+            const mainElement = Object.values(xml)[0];
             let foundError = xml.error;
 
             if (!foundError &&
-                xml[type] &&
-                xml[type].errors &&
-                xml[type].errors.length
+                mainElement &&
+                mainElement.errors
             ) {
-                [foundError] = xml[type].errors;
+                // Extract the first embedded error
+                [foundError] = mainElement.errors;
             }
 
             if (foundError) {
@@ -98,7 +86,7 @@ function parseResult(data) {
                 error.code = Number(foundError.code);
                 reject(error);
             } else {
-                resolve(xml[type]);
+                resolve(xml);
             }
         });
     }));
