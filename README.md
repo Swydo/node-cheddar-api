@@ -1,3 +1,6 @@
+> Swydo is no longer using `cheddar` and will no longer maintain this package. If you'd like to adopt this package please let us know!
+
+
 ## Node.js Cheddar API wrapper
 This module will simplify the process of integrating [Cheddar](https://www.getcheddar.com/) into your existing node.js apps.
 
